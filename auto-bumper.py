@@ -5,13 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 
 
-#Get username and password from config/login.txt
-def remove_newlines(fname):
-    flist = open(fname).readlines()
-    return [s.rstrip('\n') for s in flist]
-
-print(remove_newlines("config/login.txt"))
-
+#Set username and password from config.ini
 
 time.sleep(100)
 
