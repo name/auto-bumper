@@ -1,12 +1,18 @@
 # OGUsers Autobumper
-import configparser, time
+import configparser, time, logging
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+# Disable python logging to console
+logger = logging.getLogger('my-logger')
+logger.propagate = False
+
 # Setup web-driver
-browser = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument('headless')
+browser = webdriver.Chrome(chrome_options=options)
 
 # TODO
 # - Loop bump thread every 61 minutes
@@ -27,19 +33,23 @@ class User:
         browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Username/Email:'])[1]/following::input[1]").send_keys(self.username)
         browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[1]").send_keys(self.password)
         browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[3]").click()
+        browser.save_screenshot('new.png')
+        time.sleep(100)
 
     def bump(self):
         # Gets list of threads+comments then splits them to single values
         threads = config['user']['threads'].split(',')
-        for thread in threads:
-            thread_url = thread.split('^')[0]
-            thread_comment = thread.split('^')[1]
-            # Goes to thread
-            browser.get((thread_url))
-            # Writes out custom comment
-            browser.find_element_by_id("message").send_keys(thread_comment)
-            browser.find_element_by_id("quick_reply_submit").click()
-            time.sleep(31)
+        while True:
+            for thread in threads:
+                thread_url = thread.split('^')[0]
+                thread_comment = thread.split('^')[1]
+                # Goes to thread
+                browser.get((thread_url))
+                # Writes out custom comment
+                browser.find_element_by_id("message").send_keys(thread_comment)
+                browser.find_element_by_id("quick_reply_submit").click()
+                time.sleep(31)
+        time.sleep(3610)
 
 # Read config file and grab username/password
 config = configparser.ConfigParser()
@@ -47,7 +57,6 @@ config.read('config.ini')
 
 # Set user details
 OGU = User(config['user']['username'], config['user']['password'])
-# Run login
+# Start bumping
 OGU.login()
-# Run bump
 OGU.bump()
