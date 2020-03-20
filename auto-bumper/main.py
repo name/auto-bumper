@@ -20,10 +20,6 @@ clear()
 
 # TODO
 # - Clean up config file to make settings thread urls and comments more user friendly
-# - Research how to protect python code and run as executable
-# - Login via personal api and check hwid against system
-# - HWID Lock
-# - site for users to request hwid -> username/hwid/email
 
 class User:
     def __init__(self, username, password):
