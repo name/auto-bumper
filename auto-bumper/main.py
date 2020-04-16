@@ -29,9 +29,12 @@ class User:
     def login(self):
         # Goes to login page and user details from config.ini
         browser.get(('https://ogusers.com/member.php?action=login'))
-        browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Username/Email:'])[1]/following::input[1]").send_keys(self.username)
-        browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[1]").send_keys(self.password)
-        browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[3]").click()
+        browser.find_element_by_css_selector(".trow1 > .textbox").send_keys(self.username)
+        browser.find_element_by_name("password").send_keys(self.password)
+        browser.find_element_by_css_selector(".button").click()
+        #browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Username/Email:'])[1]/following::input[1]").send_keys(self.username)
+        #browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[1]").send_keys(self.password)
+        #browser.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='Password:'])[1]/following::input[3]").click()
         time.sleep(1)
 
     def bump(self):
